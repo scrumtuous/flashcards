@@ -1,0 +1,148 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+body,
+html {
+  height: 100%;
+  font-family: Helvetica;
+  color: white;
+  font-size: 1.25em;
+  font-weight: bold;
+}
+
+body {
+  background-color: gray;
+  padding: 2em;
+  position: relative;
+}
+
+.CardsWrapper {
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-gap: 35px;
+}
+
+.Card {
+  height: 300px;
+  position: relative;
+}
+
+.flip {
+  padding: 20px;
+  box-sizing: border-box;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  -webkit-box-shadow: 6px 6px 26px -6px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 6px 6px 26px -6px rgba(0, 0, 0, 0.75);
+  box-shadow: 6px 6px 26px -6px rgba(0, 0, 0, 0.75);
+}
+
+.front {
+  border-radius: 27px 7px 27px 7px;
+  -moz-border-radius: 27px 7px 27px 7px;
+  -webkit-border-radius: 27px 7px 27px 7px;
+}
+
+.front.color-0 { background-color: #398547 }
+.front.color-1 { background-color: #2D7F70 }
+.front.color-2 { background-color: #296387 }
+.front.color-3 { background-color: #44488F }
+.front.color-4 { background-color: #724C8A }
+.front.color-5 { background-color: #7F334C }
+.front.color-6 { background-color: #854637 }
+.front.color-7 { background-color: #87623C }
+.front.color-8 { background-color: #7F723A }
+.front.color-9 { background-color: #697A33 }
+
+.back {
+  border-radius: 7px 27px 7px 27px;
+  -moz-border-radius: 7px 27px 7px 27px;
+  -webkit-border-radius: 7px 27px 7px 27px;
+}
+
+.back.color-0 { background-color: #57CC6E }
+.back.color-1 { background-color: #40B59F }
+.back.color-2 { background-color: #3A8CBF }
+.back.color-3 { background-color: #5E64C7 }
+.back.color-4 { background-color: #A871CC }
+.back.color-5 { background-color: #EF608F }
+.back.color-6 { background-color: #D67158 }
+.back.color-7 { background-color: #D1975C }
+.back.color-8 { background-color: #CFB95E }
+.back.color-9 { background-color: #ABC752 }
+
+.front .question {
+  font-size: .75em;
+}
+
+.front .choices {
+  font-size: .6em;
+  padding-left: 0;
+}
+
+.reset {
+  border-radius: 27px;
+  -moz-border-radius: 27px;
+  -webkit-border-radius: 27px;
+  background-color: green;
+  transition: transform 0.2s ease-in-out;
+}
+
+.reset i {
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+  position: absolute;
+  top: 40px;
+  font-size: 40px;
+}
+
+.reset:hover {
+  transform: scale(1.05);
+}
+
+.reset:hover i {
+  opacity: 1;
+}
+
