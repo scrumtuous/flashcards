@@ -4,40 +4,67 @@ import ReactDOM from "react-dom";
 import {Spring} from 'react-spring'
 import { useSpring, animated  } from 'react-spring';
 import he from 'he';
+import * as Realm from "realm-web";
+
+
+
+const REALM_APP_ID = "tasktracker-wklbx"; // e.g. myapp-abcde
+const app = new Realm.App({ id: REALM_APP_ID });
 
 const { useState, useEffect, Fragment } = React
-//const { useSpring, animated } = ReactSpringHooks
-//import { useSpring, animated } from "react-spring/hooks.cjs";
+
 
 const useFetchQuestions = () => {
+	
+
   const [ questions, setQuestions ] = useState(null)
   const [ loading, setLoading ] = useState(true)
+  const [user, setUser] = React.useState(app.currentUser);
+  const loginAnonymous = async () => {
+	  
+	  if (user==null) {	
+		  const user = await app.logIn(Realm.Credentials.anonymous());
+		  console.log("Logged in with anonymous id: {user.id}");
+		  setUser(user);
+		  setNewQuestions();
+	  }
+  };
+  
+   
   const setNewQuestions = async() => {
-    const response = await fetch("https://opentdb.com/api.php?amount=9&difficulty=easy")
-    const data = await response.json()
-    const formattedQuestions = formatQuestions(data.results)
-    setQuestions(formattedQuestions)
-    setLoading(false)
+	  if (app.currentUser!=null) {
+			const mongodb = app.currentUser.mongoClient("mongodb-atlas");
+			const flashcardsCollection = mongodb.db("tracker").collection("Flashcard");
+			const allFlashcards =  await flashcardsCollection.find();
+			setQuestions(allFlashcards)
+			setLoading(false)
+	  }  
+  }
+  
+  const setMongoQuestions = async() => {
+	  setNewQuestions();
   }
   
   const formatQuestions = (rawQuestions) => {
     let formattedQuestions = []
     for (let i = 0; i < rawQuestions.length; i++) {
       formattedQuestions.push({
-        ...rawQuestions[i],
-        choices: [
-          ...rawQuestions[i].incorrect_answers, rawQuestions[i].correct_answer
-        ].reduce((a,v)=>a.splice(Math.floor(Math.random() * a.length), 0, v) && a, [])
+        ...rawQuestions[i]
       })
     }
+	console.log(formattedQuestions);
     return formattedQuestions
   }
+  
+  useEffect(() => {
+    loginAnonymous()  
+  }, [])
   
   useEffect(() => {
     setNewQuestions()  
   }, [])
   
-  return { questions, loading, setNewQuestions }
+  return { questions, loading, setNewQuestions, setMongoQuestions }
 }
 
 const Card = ({
@@ -77,9 +104,7 @@ const Card = ({
           {he.decode(question.question)}
         </div>
         <ul className="choices">
-          {question.choices.map(choice => (
-             <li>{he.decode(choice)}</li> 
-          ))}
+
         </ul>
       </animated.div>  
       <animated.div 
@@ -98,9 +123,13 @@ const Card = ({
 }
 
 const App = () => {
-  const { questions, loading, setNewQuestions } = useFetchQuestions()
+  
+  const [user, setUser] = React.useState(app.currentUser);
+
+  const { questions, loading, setNewQuestions, setMongoQuestions } = useFetchQuestions()
   
   return (
+  
     <div className="Cards">
       <div className="CardsWrapper">
         {loading && <div className="loader">Loading</div>}
@@ -118,11 +147,11 @@ const App = () => {
             <div
               className="Card"
               role="button"
-              onClick={setNewQuestions}
+              onClick={setMongoQuestions}
              >
               <div className="flip reset">
-                <i class="fas fa-sync"></i>
-                Get New Questions
+                <i className="fas fa-sync"></i>
+                Done
               </div>
             </div>
           </Fragment>
