@@ -10,7 +10,7 @@ import * as Realm from "realm-web";
 
 const REALM_APP_ID = "tasktracker-wklbx"; // e.g. myapp-abcde
 const app = new Realm.App({ id: REALM_APP_ID });
-
+const el = document.getElementById('app');
 const { useState, useEffect, Fragment } = React
 
 
@@ -35,7 +35,13 @@ const useFetchQuestions = () => {
 	  if (app.currentUser!=null) {
 			const mongodb = app.currentUser.mongoClient("mongodb-atlas");
 			const flashcardsCollection = mongodb.db("tracker").collection("Flashcard");
-			const allFlashcards =  await flashcardsCollection.find();
+			console.log("It is: " + el.getAttribute('data-param'));
+			var message = el.getAttribute('data-param');
+			
+			
+			
+			//const allFlashcards =  await flashcardsCollection.find();
+			const allFlashcards =  await flashcardsCollection.find(JSON.parse(message));
 			setQuestions(allFlashcards)
 			setLoading(false)
 	  }  
@@ -143,17 +149,8 @@ const App = () => {
                trans={index % 2 === 0 ? "X" : "Y"}
                index={index}
               />  
-            )}
-            <div
-              className="Card"
-              role="button"
-              onClick={setMongoQuestions}
-             >
-              <div className="flip reset">
-                <i className="fas fa-sync"></i>
-                Done
-              </div>
-            </div>
+            )} 
+
           </Fragment>
          }
       </div>  
