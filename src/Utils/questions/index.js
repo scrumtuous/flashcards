@@ -1,5 +1,10 @@
-import {React,useState} from 'react';
+import {React,useState,useEffect} from 'react';
+import * as Realm from "realm-web";
 
+
+const el = document.getElementById('app');
+const REALM_APP_ID = "tasktracker-wklbx"; // e.g. myapp-abcde
+const app = new Realm.App({ id: REALM_APP_ID });
 
 
 const useFetchQuestions = () => {
@@ -60,3 +65,6 @@ const useFetchQuestions = () => {
     
     return { questions, loading, setNewQuestions, setMongoQuestions }
   }
+
+  export default useFetchQuestions;
+  
